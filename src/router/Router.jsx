@@ -27,7 +27,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/update/:id",
-        loader: ({params}) => fetch(`http://localhost:3000/schedule/${params.id}`),
+        loader: ({params}) => fetch(`https://gym-server-coral.vercel.app/schedule/${params.id}`),
         element: <UpdateSchedule></UpdateSchedule>,
       },
     ],

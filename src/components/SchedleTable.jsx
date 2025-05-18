@@ -6,7 +6,7 @@ const ScheduleTable = ({ client, index, handleDeleteData }) => {
   const { _id, title, formattedDate, day, formatHour } = client;
 
   const handleComplete = () => {
-    fetch(`http://localhost:3000/schedule/${_id}`,{
+    fetch(`https://gym-server-coral.vercel.app/schedule/${_id}`,{
       method: "PATCH",
       headers: {
         "Content-Type": 'application/json',

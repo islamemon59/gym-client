@@ -26,7 +26,7 @@ const UpdateSchedule = () => {
     }
     console.log(updateData);
 
-        fetch(`http://localhost:3000/schedule/${data._id}`, {
+        fetch(`https://gym-server-coral.vercel.app/schedule/${data._id}`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",

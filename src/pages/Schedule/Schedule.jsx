@@ -9,7 +9,7 @@ const Schedule = () => {
   console.log(search);
 
   useEffect(() => {
-    fetch(`http://localhost:3000/schedule?searchParams=${search}`)
+    fetch(`https://gym-server-coral.vercel.app/schedule?searchParams=${search}`)
       .then((res) => res.json())
       .then((data) => {
         setClientData(data);
@@ -27,7 +27,7 @@ const Schedule = () => {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        fetch(`http://localhost:3000/schedule/${id}`, {
+        fetch(`https://gym-server-coral.vercel.app/schedule/${id}`, {
           method: "DELETE",
         })
           .then((res) => res.json())

@@ -32,7 +32,7 @@ const AddCoffee = () => {
     const newClient = { title, formattedDate, day, formatHour };
     console.log(newClient);
 
-    fetch("http://localhost:3000/schedule", {
+    fetch("https://gym-server-coral.vercel.app/schedule", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
