@@ -1,20 +1,52 @@
-import React from "react";
+import { useState } from "react";
 
 import "react-clock/dist/Clock.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-const formatTime12Hour = (date) => {
-  let hours = date.getHours();
-  const minutes = String(date.getMinutes()).padStart(2, "0");
-  const seconds = String(date.getSeconds()).padStart(2, "0");
-  const ampm = hours >= 12 ? "PM" : "AM";
-  hours = hours % 12 || 12;
-
-  return `${hours}:${minutes}:${seconds} ${ampm}`;
-};
+import { useLoaderData } from "react-router-dom";
+import { formatTime12Hour } from "../../Utitlites/formatTime12Hour";
+import Swal from "sweetalert2";
 
 const UpdateSchedule = () => {
-  const handleUpdateSchedule = () => {};
+  const data = useLoaderData()
+  console.log(data);
+  const [title, setTitle] = useState(data?.title)
+  const [date, setDate] = useState(data?.formattedDate)
+  const [day, setDay] = useState(data?.day)
+  const [hour, setHour] = useState(data.formatHour)
+
+  console.log(data);
+  const handleUpdateSchedule = (e) => {
+    e.preventDefault()
+    const updateData = {
+      title: title,
+      day:day,
+      hour: hour,
+      data:date,
+    }
+    console.log(updateData);
+
+        fetch(`http://localhost:3000/schedule/${data._id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updateData),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.modifiedCount) {
+              Swal.fire({
+                position: "top-center",
+                icon: "success",
+                title: "Successfully added",
+                showConfirmButton: false,
+                timer: 1500,
+              });
+              console.log("after added response", data);
+            }
+          });
+  };
   return (
     <div>
       <div className="bg-[#F4F3F0] lg:p-24">
@@ -28,6 +60,8 @@ const UpdateSchedule = () => {
               <input
                 type="text"
                 name="Title"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
                 className="input input-bordered"
                 required
               />
@@ -36,7 +70,7 @@ const UpdateSchedule = () => {
               <label className="label font-bold">
                 <span className="label-text">Day</span>
               </label>
-              <DatePicker className="input input-bordered w-full" />
+              <DatePicker value={date} onChange={(date) => setDate(date.toLocaleDateString("en-CA"))} className="input input-bordered w-full" />
             </div>
           </div>
           <div className="flex gap-6 ">
@@ -45,7 +79,7 @@ const UpdateSchedule = () => {
                 <span className="label-text font-bold">Day</span>
               </label>
 
-              <select className="input input-bordered " name="day" id="day">
+              <select className="input input-bordered" value={day} onChange={(e) => setDay(e.target.value)} name="day" id="day">
                 <option value="sunday">Sunday</option>
                 <option value="monday">Monday</option>
                 <option value="tuesday">Tuesday</option>
@@ -62,7 +96,8 @@ const UpdateSchedule = () => {
 
               <DatePicker
                 className="input input-bordered w-full"
-                readOnly
+                value={hour}
+                onChange={(date) => setHour(formatTime12Hour(date))}
                 showTimeSelect
                 showTimeSelectOnly
                 timeIntervals={15}

@@ -2,6 +2,7 @@ import { useState } from "react";
 import "react-clock/dist/Clock.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import Swal from "sweetalert2";
 
 const formatTime12Hour = (date) => {
   let hours = date.getHours();
@@ -27,6 +28,30 @@ const AddCoffee = () => {
     const formattedDate = startDate.toLocaleDateString("en-CA");
     const title = form.title.value;
     const day = form.day.value;
+
+    const newClient = { title, formattedDate, day, formatHour };
+    console.log(newClient);
+
+    fetch("http://localhost:3000/schedule", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newClient),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.insertedId) {
+          Swal.fire({
+            position: "top-center",
+            icon: "success",
+            title: "Successfully added",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+          console.log("after added response", data);
+        }
+      });
   };
 
   return (
